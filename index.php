@@ -35,13 +35,37 @@ $app->post('/login', function (Request $request, Response $response, $args) {
    	return $response->withHeader('Content-Type', 'application/json');
 });
 
-$app->post('/profile', function (Request $request, Response $response, $args) {
+$app->get('/profile', function (Request $request, Response $response, $args) {
+
+	$data = $request->getQueryParams();
+
+	$profile = new ProfileController($data);
+
+	$resp = $profile->run('view');
+
+	$response->getBody()->write(json_encode($resp));
+   	return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->post('/profile/save', function (Request $request, Response $response, $args) {
 
 	$data = $request->getParsedBody();
 
 	$profile = new ProfileController($data);
 
-	$resp = $profile->run('view');
+	$resp = $profile->run('save');
+
+	$response->getBody()->write(json_encode($resp));
+   	return $response->withHeader('Content-Type', 'application/json');
+});
+
+$app->get('/profile/users', function (Request $request, Response $response, $args) {
+
+	$data = $request->getQueryParams();
+
+	$profile = new ProfileController($data);
+
+	$resp = $profile->run('users_list');
 
 	$response->getBody()->write(json_encode($resp));
    	return $response->withHeader('Content-Type', 'application/json');

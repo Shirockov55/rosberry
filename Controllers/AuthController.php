@@ -23,7 +23,7 @@ class AuthController
 		$db::sql($query, $args);
 		$user_id = $db::lastInsertId();
 
-		$token = UserController::gen_token($user_id);
+		$token = UserController::get_token($user_id);
 
 		return [$user_id, $token];
 	}
@@ -34,8 +34,8 @@ class AuthController
 
 		$user = $db::getRow("SELECT * FROM `users` WHERE `email` = ? AND `password` = ?", [ $data['email'], md5($data['password']) ]);
 
-		if($user !== false){
-			$token = UserController::gen_token($user['id']);
+		if ($user !== false) {
+			$token = UserController::get_token($user['id']);
 			return [
 				'status' => 'success',
 				'token' => $token
